@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Food - Đặt món ăn trực tuyến</title>
+    <meta name="description" content="Na Food - Hệ thống đặt món ăn trực tuyến với đa dạng món ngon, giao hàng nhanh chóng">
+    <meta name="keywords" content="đặt món ăn, giao hàng, phở, bún, cơm, bánh mì">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/toast.css">
+    <link rel="stylesheet" href="assets/css/index/header.css">
+    <link rel="stylesheet" href="assets/css/index/products.css">
+    <link rel="stylesheet" href="assets/css/index/detail.css">
+    <link rel="stylesheet" href="assets/css/index/cart.css">
+    <link rel="stylesheet" href="assets/css/index/checkout.css">
+    <link rel="stylesheet" href="assets/css/index/orders.css">
+    <link rel="stylesheet" href="assets/css/index/auth.css">
+    <link rel="stylesheet" href="assets/css/index/review.css">
+    <link rel="stylesheet" href="assets/css/index/payment.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="assets/images/logo.png" alt="Na Food" class="logo-img">
+                    <span class="logo-text">Na Food</span>
+                </div>
+                
+                <div class="nav-menu">
+                    <a href="#home" class="nav-link active">Trang chủ</a>
+                    <a href="#products" class="nav-link">Thực đơn</a>
+                    <a href="#about" class="nav-link">Giới thiệu</a>
+                    <a href="#contact" class="nav-link">Liên hệ</a>
+                </div>
+                
+                <div class="nav-actions">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Tìm món ăn...">
+                        <button id="searchBtn"><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                    
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-info" id="userInfo" style="display: none;">
+                            <img src="/assets/images/default-avatar.png" alt="Avatar" class="user-avatar" id="userAvatar">
+                            <span class="user-name" id="userName"></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        
+                        <div class="auth-buttons" id="authButtons">
+                            <button class="btn btn-outline" id="loginBtn">Đăng nhập</button>
+                            <button class="btn btn-primary" id="registerBtn">Đăng ký</button>
+                        </div>
+                        
+                        <div class="dropdown-menu" id="userDropdown" style="display: none;">
+                            <a href="#" id="profileLink"><i class="fas fa-user"></i> Thông tin cá nhân</a>
+                            <a href="#" id="ordersLink"><i class="fas fa-list"></i> Đơn hàng của tôi</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                        </div>
+                    </div>
+                    
+                    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>🍜 Na Food</h1>
+                <p>Hệ thống đặt món ăn trực tuyến với đa dạng món ngon, giao hàng nhanh chóng</p>
+                <a href="#products" class="btn btn-primary">Xem thực đơn</a>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="products-section">
+            <div class="container">
+                <h2 class="section-title">Thực đơn hôm nay</h2>
+                <div class="products-grid" id="productsGrid">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>Đang tải sản phẩm...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #333; color: white; text-align: center; padding: 2rem 0; margin-top: 3rem;">
+        <div class="container">
+            <p>&copy; 2024 Na Food. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+                    <!-- Products will be loaded here -->
+                </div>
+                
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be generated here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="authContent">
+                <!-- Auth forms will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <div id="productContent">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Giỏ hàng</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-content" id="cartContent">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Tổng cộng: <strong id="cartTotal">0đ</strong></span>
+            </div>
+            <button class="btn btn-primary btn-full" id="checkoutBtn">Thanh toán</button>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JavaScript Files -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/index/header.js"></script>
+    <script src="assets/js/index/products.js"></script>
+    <script src="assets/js/index/detail.js"></script>
+    <script src="assets/js/index/cart.js"></script>
+    <script src="assets/js/index/checkout.js"></script>
+    <script src="assets/js/index/orders.js"></script>
+    <script src="assets/js/index/auth.js"></script>
+    <script src="assets/js/index/review.js"></script>
+    <script src="assets/js/index/payment.js"></script>
+    
+    <!-- Main App Script -->
+    <script>
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all modules
+            if (typeof HeaderModule !== 'undefined') HeaderModule.init();
+            if (typeof ProductsModule !== 'undefined') ProductsModule.init();
+            if (typeof CartModule !== 'undefined') CartModule.init();
+            if (typeof AuthModule !== 'undefined') AuthModule.init();
+            
+            console.log('Na Food App initialized successfully');
+        });
+    </script>
+</body>
+</html>

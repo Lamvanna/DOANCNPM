@@ -1,0 +1,314 @@
+/* Admin User Management Styles */
+
+/* User Table Specific */
+.user-avatar-cell {
+    width: 60px;
+}
+
+.user-avatar-cell img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #666;
+}
+
+.role-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.role-badge.admin {
+    background-color: #dc3545;
+    color: white;
+}
+
+.role-badge.staff {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.role-badge.user {
+    background-color: #28a745;
+    color: white;
+}
+
+.join-date {
+    font-size: 12px;
+    color: #666;
+}
+
+/* User Detail Modal */
+.user-detail {
+    padding: 30px;
+}
+
+.user-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.user-detail-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-detail-info h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.user-detail-email {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.user-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Role Change Form */
+.role-change-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.role-change-form h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.role-options {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.role-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.role-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
+
+.role-option label {
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Account Status */
+.account-status {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.account-status h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.status-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-switch.active {
+    background: #28a745;
+}
+
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch.active::before {
+    transform: translateX(26px);
+}
+
+/* User Activity */
+.user-activity {
+    margin-bottom: 20px;
+}
+
+.user-activity h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.activity-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+    color: white;
+}
+
+.activity-icon.login {
+    background: #28a745;
+}
+
+.activity-icon.order {
+    background: #667eea;
+}
+
+.activity-icon.review {
+    background: #ffc107;
+    color: #333;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.activity-time {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .user-detail-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .user-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .role-options {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .user-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-detail {
+        padding: 20px;
+    }
+    
+    .user-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .user-detail-avatar {
+        width: 60px;
+        height: 60px;
+    }
+}

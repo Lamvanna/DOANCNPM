@@ -1,0 +1,92 @@
+version: "3.9"
+
+services:
+  # Frontend service (Development)
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+    networks:
+      - nafood-network
+    restart: unless-stopped
+
+  # Backend service (Development)
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb+srv://admin:UTEIjifcllB420pH@lamv.tzc1slv.mongodb.net/nafood
+      - JWT_SECRET=nafood_jwt_secret_key_2024_development
+      - PORT=5000
+      - CORS_ORIGIN=http://localhost:3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/uploads:/app/uploads
+    networks:
+      - nafood-network
+    restart: unless-stopped
+    command: npm run dev
+
+  # MongoDB service - DISABLED (Using MongoDB Atlas)
+  # mongo:
+  #   image: mongo:7.0
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     - MONGO_INITDB_DATABASE=nafood
+  #   volumes:
+  #     - mongo-data-dev:/data/db
+  #     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  #   networks:
+  #     - nafood-network
+  #   restart: unless-stopped
+
+  # MongoDB Express - DISABLED (Using MongoDB Atlas)
+  # mongo-express:
+  #   image: mongo-express:latest
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     - ME_CONFIG_MONGODB_SERVER=mongo
+  #     - ME_CONFIG_MONGODB_PORT=27017
+  #     - ME_CONFIG_BASICAUTH_USERNAME=admin
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+  #     - ME_CONFIG_MONGODB_ADMINUSERNAME=
+  #     - ME_CONFIG_MONGODB_ADMINPASSWORD=
+  #   depends_on:
+  #     - mongo
+  #   networks:
+  #     - nafood-network
+  #   restart: unless-stopped
+
+  # Redis for caching (Development)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data-dev:/data
+    networks:
+      - nafood-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+volumes:
+  # mongo-data-dev:
+  #   driver: local
+  redis-data-dev:
+    driver: local
+
+networks:
+  nafood-network:
+    driver: bridge
