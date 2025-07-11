@@ -40,8 +40,8 @@ const AdminLoginModule = {
 
     // Check authentication status
     checkAuthStatus() {
-        const token = Utils.storage.get('token');
-        const user = Utils.storage.get('user');
+        const token = Storage.get(STORAGE_KEYS.TOKEN);
+        const user = Storage.get(STORAGE_KEYS.USER);
 
         if (token && user && (user.role === 'admin' || user.role === 'staff')) {
             this.showDashboard(user);
@@ -53,7 +53,7 @@ const AdminLoginModule = {
     // Handle login form submission
     async handleLogin(e) {
         e.preventDefault();
-        
+
         const form = e.target;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
@@ -69,24 +69,26 @@ const AdminLoginModule = {
 
         try {
             const response = await AuthAPI.login(data.email, data.password);
-            
+
             if (response.success) {
                 const { user, token } = response.data;
-                
+
                 // Check if user has admin/staff role
                 if (user.role !== 'admin' && user.role !== 'staff') {
                     throw new Error('Bạn không có quyền truy cập vào trang quản trị');
                 }
 
                 // Save auth data
-                Utils.storage.set('token', token);
-                Utils.storage.set('user', user);
-                
+                Storage.set(STORAGE_KEYS.TOKEN, token);
+                Storage.set(STORAGE_KEYS.USER, user);
+
                 // Show success message
                 Utils.showToast('Đăng nhập thành công!', 'success');
-                
+
                 // Show dashboard
                 this.showDashboard(user);
+            } else {
+                throw new Error(response.message || 'Đăng nhập thất bại');
             }
         } catch (error) {
             Utils.showToast(error.message || 'Đăng nhập thất bại', 'error');
@@ -100,8 +102,8 @@ const AdminLoginModule = {
     handleLogout() {
         if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
             // Clear auth data
-            Utils.storage.remove('token');
-            Utils.storage.remove('user');
+            Utils.storage.remove(STORAGE_KEYS.TOKEN);
+            Utils.storage.remove(STORAGE_KEYS.USER);
             
             // Show success message
             Utils.showToast('Đăng xuất thành công', 'success');

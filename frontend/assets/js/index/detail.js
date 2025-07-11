@@ -175,6 +175,121 @@ const ProductDetailModule = {
 
         if (increaseBtn) {
             increaseBtn.addEventListener('click', () => {
+                if (quantity < 99) {
+                    quantity++;
+                    quantityDisplay.textContent = quantity;
+                }
+            });
+        }
+
+        // Add to cart button
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        if (addToCartBtn && this.currentProduct) {
+            addToCartBtn.addEventListener('click', () => {
+                const cartItem = {
+                    product: this.currentProduct,
+                    quantity: quantity
+                };
+
+                EventBus.emit('cart:add', cartItem);
+                Utils.showToast(`Đã thêm ${this.currentProduct.name} vào giỏ hàng`, 'success');
+            });
+        }
+
+        // Image thumbnails
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const mainImage = document.getElementById('mainProductImage');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked thumbnail
+                thumb.classList.add('active');
+                // Update main image
+                if (mainImage) {
+                    mainImage.src = thumb.src;
+                }
+            });
+        });
+
+        // Close modal events
+        const modal = document.getElementById('productModal');
+        const closeBtn = modal?.querySelector('.close');
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Close on outside click
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Load reviews
+        this.loadProductReviews(this.currentProduct._id);
+    },
+
+    // Load product reviews
+    async loadProductReviews(productId) {
+        try {
+            const response = await API.get(`/reviews/product/${productId}`);
+            const reviewsContainer = document.getElementById('productReviews');
+
+            if (response.success && response.data.reviews.length > 0) {
+                reviewsContainer.innerHTML = response.data.reviews.map(review => `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <strong>${review.user.name}</strong>
+                                <div class="review-rating">
+                                    ${this.renderStars(review.rating)}
+                                </div>
+                            </div>
+                            <span class="review-date">${new Date(review.createdAt).toLocaleDateString('vi-VN')}</span>
+                        </div>
+                        <div class="review-content">
+                            <p>${review.comment}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                reviewsContainer.innerHTML = `
+                    <div class="no-reviews">
+                        <i class="fas fa-star-o"></i>
+                        <p>Chưa có đánh giá nào cho sản phẩm này</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading reviews:', error);
+            const reviewsContainer = document.getElementById('productReviews');
+            if (reviewsContainer) {
+                reviewsContainer.innerHTML = `
+                    <div class="no-reviews">
+                        <p>Không thể tải đánh giá</p>
+                    </div>
+                `;
+            }
+        }
+    }
+};
+
+window.ProductDetailModule = ProductDetailModule;
+                    quantity--;
+                    quantityDisplay.textContent = quantity;
+                }
+            });
+        }
+
+        if (increaseBtn) {
+            increaseBtn.addEventListener('click', () => {
                 quantity++;
                 quantityDisplay.textContent = quantity;
             });

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Admin Dependencies</h1>
+    
+    <div class="test-section">
+        <h3>1. Test Script Loading</h3>
+        <button onclick="testScriptLoading()">Test Scripts</button>
+        <div id="scriptResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Test API Call</h3>
+        <button onclick="testAPICall()">Test Login API</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Test Storage</h3>
+        <button onclick="testStorage()">Test Storage</button>
+        <div id="storageResult"></div>
+    </div>
+
+    <!-- Load scripts in correct order -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+
+    <script>
+        function testScriptLoading() {
+            const result = document.getElementById('scriptResult');
+            let html = '<h4>Script Loading Test:</h4>';
+            
+            // Test Utils
+            if (typeof Utils !== 'undefined') {
+                html += '<p class="success">✅ Utils loaded</p>';
+            } else {
+                html += '<p class="error">❌ Utils not loaded</p>';
+            }
+            
+            // Test Storage
+            if (typeof Storage !== 'undefined') {
+                html += '<p class="success">✅ Storage loaded</p>';
+            } else {
+                html += '<p class="error">❌ Storage not loaded</p>';
+            }
+            
+            // Test STORAGE_KEYS
+            if (typeof STORAGE_KEYS !== 'undefined') {
+                html += '<p class="success">✅ STORAGE_KEYS loaded</p>';
+                html += '<pre>' + JSON.stringify(STORAGE_KEYS, null, 2) + '</pre>';
+            } else {
+                html += '<p class="error">❌ STORAGE_KEYS not loaded</p>';
+            }
+            
+            // Test AuthAPI
+            if (typeof AuthAPI !== 'undefined') {
+                html += '<p class="success">✅ AuthAPI loaded</p>';
+            } else {
+                html += '<p class="error">❌ AuthAPI not loaded</p>';
+            }
+            
+            // Test API_BASE_URL
+            if (typeof API_BASE_URL !== 'undefined') {
+                html += '<p class="success">✅ API_BASE_URL: ' + API_BASE_URL + '</p>';
+            } else {
+                html += '<p class="error">❌ API_BASE_URL not loaded</p>';
+            }
+            
+            result.innerHTML = html;
+        }
+        
+        async function testAPICall() {
+            const result = document.getElementById('apiResult');
+            result.innerHTML = '<p>Testing API call...</p>';
+            
+            try {
+                const response = await AuthAPI.login('admin@nafood.com', 'admin123');
+                result.innerHTML = `
+                    <h4>API Test Result:</h4>
+                    <p class="success">✅ API call successful</p>
+                    <pre>${JSON.stringify(response, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <h4>API Test Result:</h4>
+                    <p class="error">❌ API call failed: ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+        
+        function testStorage() {
+            const result = document.getElementById('storageResult');
+            let html = '<h4>Storage Test:</h4>';
+            
+            try {
+                // Test set
+                Storage.set(STORAGE_KEYS.TOKEN, 'test-token');
+                Storage.set(STORAGE_KEYS.USER, { name: 'Test User', role: 'admin' });
+                
+                // Test get
+                const token = Storage.get(STORAGE_KEYS.TOKEN);
+                const user = Storage.get(STORAGE_KEYS.USER);
+                
+                if (token === 'test-token') {
+                    html += '<p class="success">✅ Token storage works</p>';
+                } else {
+                    html += '<p class="error">❌ Token storage failed</p>';
+                }
+                
+                if (user && user.name === 'Test User') {
+                    html += '<p class="success">✅ User storage works</p>';
+                } else {
+                    html += '<p class="error">❌ User storage failed</p>';
+                }
+                
+                html += '<pre>Token: ' + token + '\nUser: ' + JSON.stringify(user, null, 2) + '</pre>';
+                
+                // Clean up
+                Storage.remove(STORAGE_KEYS.TOKEN);
+                Storage.remove(STORAGE_KEYS.USER);
+                
+            } catch (error) {
+                html += '<p class="error">❌ Storage test failed: ' + error.message + '</p>';
+            }
+            
+            result.innerHTML = html;
+        }
+        
+        // Auto-run script loading test
+        window.addEventListener('load', function() {
+            testScriptLoading();
+        });
+    </script>
+</body>
+</html>

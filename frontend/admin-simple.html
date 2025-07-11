@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Food - Admin Login (Simple)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        
+        .dashboard {
+            display: none;
+            text-align: center;
+        }
+        
+        .dashboard h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginForm" class="login-container">
+        <div class="login-header">
+            <h1>Na Food Admin</h1>
+            <p>Đăng nhập để truy cập bảng điều khiển</p>
+        </div>
+        
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="admin@nafood.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" value="admin123" required>
+            </div>
+            
+            <button type="submit" class="login-btn" id="loginBtn">
+                Đăng nhập
+            </button>
+            
+            <div id="message"></div>
+        </form>
+    </div>
+    
+    <!-- Dashboard -->
+    <div id="dashboard" class="login-container dashboard">
+        <h2>Chào mừng, <span id="userName"></span>!</h2>
+        <p>Bạn đã đăng nhập thành công vào hệ thống quản trị Na Food.</p>
+        <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+        <br><br>
+        <a href="admin.html" style="color: #667eea; text-decoration: none;">
+            → Truy cập Admin Panel đầy đủ
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    
+    <script>
+        // Simple admin login
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const message = document.getElementById('message');
+            
+            // Disable button
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Đang đăng nhập...';
+            message.innerHTML = '';
+            
+            try {
+                console.log('Attempting login with:', { email, password });
+                
+                // Call API
+                const response = await AuthAPI.login(email, password);
+                console.log('Login response:', response);
+                
+                if (response.success) {
+                    const { user, token } = response.data;
+                    
+                    // Check role
+                    if (user.role !== 'admin' && user.role !== 'staff') {
+                        throw new Error('Bạn không có quyền truy cập vào trang quản trị');
+                    }
+                    
+                    // Save to storage
+                    Storage.set(STORAGE_KEYS.TOKEN, token);
+                    Storage.set(STORAGE_KEYS.USER, user);
+                    
+                    // Show success
+                    message.innerHTML = '<div class="success-message">Đăng nhập thành công!</div>';
+                    
+                    // Show dashboard
+                    setTimeout(() => {
+                        document.getElementById('loginForm').style.display = 'none';
+                        document.getElementById('dashboard').style.display = 'block';
+                        document.getElementById('userName').textContent = user.name;
+                    }, 1000);
+                    
+                } else {
+                    throw new Error(response.message || 'Đăng nhập thất bại');
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                message.innerHTML = '<div class="error-message">' + (error.message || 'Có lỗi xảy ra') + '</div>';
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Đăng nhập';
+            }
+        });
+        
+        function logout() {
+            Storage.remove(STORAGE_KEYS.TOKEN);
+            Storage.remove(STORAGE_KEYS.USER);
+            
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('message').innerHTML = '';
+        }
+        
+        // Check if already logged in
+        window.addEventListener('load', function() {
+            const token = Storage.get(STORAGE_KEYS.TOKEN);
+            const user = Storage.get(STORAGE_KEYS.USER);
+            
+            if (token && user && (user.role === 'admin' || user.role === 'staff')) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('userName').textContent = user.name;
+            }
+        });
+    </script>
+</body>
+</html>

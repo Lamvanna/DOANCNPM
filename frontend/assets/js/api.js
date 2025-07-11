@@ -1,5 +1,5 @@
 // API Configuration and Helper Functions
-const API_BASE_URL = 'http://localhost:5000/api';
+// API_BASE_URL is defined in utils.js
 
 // API Helper Class
 class API {
@@ -112,7 +112,7 @@ const AuthAPI = {
     },
 
     async getProfile() {
-        return API.get('/auth/profile');
+        return API.get('/auth/me');
     },
 
     async updateProfile(userData) {

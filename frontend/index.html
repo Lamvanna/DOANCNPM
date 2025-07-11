@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/css/index/header.css">
     <link rel="stylesheet" href="assets/css/index/products.css">
     <link rel="stylesheet" href="assets/css/index/detail.css">
+    <link rel="stylesheet" href="assets/css/index/product-detail.css">
     <link rel="stylesheet" href="assets/css/index/cart.css">
     <link rel="stylesheet" href="assets/css/index/checkout.css">
     <link rel="stylesheet" href="assets/css/index/orders.css">
@@ -152,6 +153,26 @@
         </div>
     </div>
 
+    <!-- My Orders Modal -->
+    <div id="myOrdersModal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <div id="myOrdersContent">
+                <!-- Orders will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content extra-large">
+            <span class="close">&times;</span>
+            <div id="checkoutContent">
+                <!-- Checkout form will be loaded here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Cart Sidebar -->
     <div id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
@@ -197,9 +218,12 @@
             // Initialize all modules
             if (typeof HeaderModule !== 'undefined') HeaderModule.init();
             if (typeof ProductsModule !== 'undefined') ProductsModule.init();
+            if (typeof ProductDetailModule !== 'undefined') ProductDetailModule.init();
             if (typeof CartModule !== 'undefined') CartModule.init();
+            if (typeof CheckoutModule !== 'undefined') CheckoutModule.init();
+            if (typeof OrdersModule !== 'undefined') OrdersModule.init();
             if (typeof AuthModule !== 'undefined') AuthModule.init();
-            
+
             console.log('Na Food App initialized successfully');
         });
     </script>

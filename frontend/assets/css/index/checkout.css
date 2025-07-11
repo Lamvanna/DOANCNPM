@@ -289,3 +289,106 @@
         position: static;
     }
 }
+
+/* Enhanced Payment Methods */
+.payment-option input[type="radio"]:checked + .payment-info {
+    color: var(--primary-color);
+}
+
+.payment-option input[type="radio"]:checked {
+    accent-color: var(--primary-color);
+}
+
+.payment-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.payment-desc {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Payment Details Section */
+.payment-details-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.bank-details h4,
+.momo-details h4,
+.vnpay-details h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.bank-info p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.payment-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #856404;
+}
+
+.payment-note i {
+    color: #f39c12;
+    margin-top: 0.1rem;
+}
+
+/* Form Validation */
+.form-group input.error,
+.form-group textarea.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.field-error::before {
+    content: "⚠";
+    font-size: 0.8rem;
+}
+
+/* Form Enhancements */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    outline: none;
+}
+
+.form-group input:valid {
+    border-color: #28a745;
+}
+
+.form-group input:valid:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
