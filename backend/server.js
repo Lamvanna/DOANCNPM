@@ -45,7 +45,13 @@ app.use('/api/', limiter);
 
 // CORS configuration
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:8080',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:8080',
+        process.env.CORS_ORIGIN
+    ].filter(Boolean),
     credentials: true
 }));
 
@@ -66,7 +72,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Health check endpoint
+// Health check endpoints
 app.get('/health', (req, res) => {
     res.status(200).json({
         success: true,
@@ -74,6 +80,37 @@ app.get('/health', (req, res) => {
         timestamp: new Date().toISOString(),
         uptime: process.uptime()
     });
+});
+
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'API is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        version: '1.0.0'
+    });
+});
+
+// Simple categories endpoint
+app.get('/api/categories', async (req, res) => {
+    try {
+        const Product = require('./models/Product');
+        const categories = await Product.distinct('category');
+        res.json({
+            success: true,
+            data: categories.map(cat => ({
+                name: cat,
+                value: cat
+            }))
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi lấy danh mục',
+            error: error.message
+        });
+    }
 });
 
 // API routes

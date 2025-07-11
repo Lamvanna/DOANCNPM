@@ -25,7 +25,6 @@ const orderItemSchema = new mongoose.Schema({
 const orderSchema = new mongoose.Schema({
     orderNumber: {
         type: String,
-        unique: true,
         required: true
     },
     user: {
@@ -141,5 +140,8 @@ orderSchema.pre('save', function(next) {
     }
     next();
 });
+
+// Create unique index for orderNumber
+orderSchema.index({ orderNumber: 1 }, { unique: true });
 
 module.exports = mongoose.model('Order', orderSchema);

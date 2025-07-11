@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Vui lòng nhập email'],
-        unique: true,
         lowercase: true,
         match: [
             /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -84,5 +83,8 @@ userSchema.methods.toJSON = function() {
     delete user.resetPasswordExpire;
     return user;
 };
+
+// Create unique index for email
+userSchema.index({ email: 1 }, { unique: true });
 
 module.exports = mongoose.model('User', userSchema);
